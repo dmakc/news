@@ -1,19 +1,17 @@
 import pytest
 
-# Импортируем модель заметки, чтобы создать экземпляр.
 from news.models import News, Comment
 from django.contrib.auth.models import AnonymousUser
 
 
 @pytest.fixture
-# Используем встроенную фикстуру для модели пользователей django_user_model.
 def author(django_user_model):
     return django_user_model.objects.create(username='Автор')
 
 
 @pytest.fixture
-def author_client(author, client):  # Вызываем фикстуру автора и клиента.
-    client.force_login(author)  # Логиним автора в клиенте.
+def author_client(author, client):
+    client.force_login(author)
     return client
 
 
@@ -39,23 +37,19 @@ def news(author):
 
 @pytest.fixture
 def comments(author, news):
-    news = Comment.objects.create(
+    comment = Comment.objects.create(
         news=news,
         author=author,
-        text='Текст новости',
+        text='Текст комментария',
     )
-    return news
+    return comment
 
 
 @pytest.fixture
-# Фикстура запрашивает другую фикстуру создания заметки.
 def slug_for_args(news):
-    # И возвращает кортеж, который содержит slug заметки.
-    # На то, что это кортеж, указывает запятая в конце выражения.
-    return news.pk,
+    return news.id,
 
 
-# Добавляем фикстуру form_data
 @pytest.fixture
 def form_data():
     return {

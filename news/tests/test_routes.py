@@ -25,22 +25,19 @@ def test_pages_availability_for_anonymous_user(client, name, args):
 @pytest.mark.parametrize(
     'parametrized_client, expected_status',
     (
-        (pytest.lazy_fixture('admin_client'), HTTPStatus.OK),
-        (pytest.lazy_fixture('author_client'), HTTPStatus.NOT_FOUND),
+        (pytest.lazy_fixture('admin_client'), HTTPStatus.NOT_FOUND),
+        (pytest.lazy_fixture('author_client'), HTTPStatus.OK),
     ),
 )
 @pytest.mark.parametrize(
     'name',
     ('news:edit', 'news:delete'),
 )
-# В параметры теста добавляем имена parametrized_client и expected_status.
 def test_pages_availability_for_different_users(
-        parametrized_client, name, news, expected_status
+        parametrized_client, name, comments, expected_status
 ):
-    url = reverse(name, args=(news.pk,))
-    # Делаем запрос от имени клиента parametrized_client:
+    url = reverse(name, args=(comments.id,))
     response = parametrized_client.get(url)
-    # Ожидаем ответ страницы, указанный в expected_status:
     assert response.status_code == expected_status
 
 
