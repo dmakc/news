@@ -1,7 +1,11 @@
-import pytest
+from datetime import datetime, timedelta
 
-from news.models import News, Comment
+import pytest
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.utils import timezone
+
+from news.models import Comment, News
 
 
 @pytest.fixture
@@ -36,13 +40,22 @@ def news(author):
 
 
 @pytest.fixture
+def news_count(author):
+    news_count = News.objects.bulk_create(
+        News(title=f'Новость {index}', text='Просто текст.')
+        for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
+    )
+    return news_count
+
+
+@pytest.fixture
 def comments(author, news):
-    comment = Comment.objects.create(
+    comments = Comment.objects.create(
         news=news,
         author=author,
         text='Текст комментария',
     )
-    return comment
+    return comments
 
 
 @pytest.fixture
