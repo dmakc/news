@@ -41,8 +41,13 @@ def news(author):
 
 @pytest.fixture
 def news_count(author):
+    today = datetime.today()
     news_count = News.objects.bulk_create(
-        News(title=f'Новость {index}', text='Просто текст.')
+        News(
+            title=f'Новость {index}',
+            text='Просто текст.',
+            date=today - timedelta(days=index)
+        )
         for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     )
     return news_count
