@@ -23,16 +23,20 @@ def test_new_count(
     ) is news_in_list <= settings.NEWS_COUNT_ON_HOME_PAGE
 
 
-@pytest.mark.parametrize(
-    'name',
-    ('news:home')
-)
-def test_news_order(name, author_client):
-    url = reverse(name)
+def test_news_order(author_client, news_count):
+    url = reverse('news:home')
     response = author_client.get(url)
     object_list = response.context['object_list']
-    print(object_list)
     all_dates = [news_count.date for news_count in object_list]
-    print(all_dates)
     sorted_dates = sorted(all_dates, reverse=True)
-    assert (all_dates is sorted_dates)
+    assert all_dates == sorted_dates
+
+
+def test_comments_order(author_client, slug_for_args, comments):
+    url = reverse('news:detail', args=slug_for_args)
+    response = author_client.get(url)
+    news = response.context['news']
+    all_comments = news.comment_set.all()
+    print(all_comments[0].created)
+    print(all_comments[1].created)
+    assert all_comments[0].created < all_comments[1].created

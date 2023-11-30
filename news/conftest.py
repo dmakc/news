@@ -46,7 +46,7 @@ def news_count(author):
         News(
             title=f'Новость {index}',
             text='Просто текст.',
-            date=today - timedelta(days=index)
+            date=today - timedelta(days=index),
         )
         for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     )
@@ -55,10 +55,15 @@ def news_count(author):
 
 @pytest.fixture
 def comments(author, news):
-    comments = Comment.objects.create(
-        news=news,
-        author=author,
-        text='Текст комментария',
+    now = timezone.now()
+    comments = Comment.objects.bulk_create(
+        Comment(
+            news=news,
+            author=author,
+            text=f'Текст {index}',
+            created=now + timedelta(days=index),
+        )
+        for index in range(5)
     )
     return comments
 
