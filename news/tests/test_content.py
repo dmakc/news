@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 import pytest
 from django.conf import settings
 from django.urls import reverse
@@ -37,6 +35,16 @@ def test_comments_order(author_client, slug_for_args, comments):
     response = author_client.get(url)
     news = response.context['news']
     all_comments = news.comment_set.all()
-    print(all_comments[0].created)
-    print(all_comments[1].created)
     assert all_comments[0].created < all_comments[1].created
+
+
+def test_anonymous_client_has_no_form(client, slug_for_args):
+    url = reverse('news:detail', args=slug_for_args)
+    response = client.get(url)
+    assert 'form' not in response.context
+
+
+def test_authorized_client_has_form(author_client, slug_for_args):
+    url = reverse('news:detail', args=slug_for_args)
+    response = author_client.get(url)
+    assert 'form' in response.context

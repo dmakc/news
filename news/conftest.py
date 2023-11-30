@@ -56,15 +56,15 @@ def news_count(author):
 @pytest.fixture
 def comments(author, news):
     now = timezone.now()
-    comments = Comment.objects.bulk_create(
-        Comment(
+    for index in range(5):
+        comments = Comment.objects.create(
             news=news,
             author=author,
             text=f'Текст {index}',
             created=now + timedelta(days=index),
         )
-        for index in range(5)
-    )
+        comments.created = now + timedelta(days=index)
+        comments.save()
     return comments
 
 
