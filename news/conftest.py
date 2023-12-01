@@ -60,7 +60,7 @@ def comments(author, news):
         comments = Comment.objects.create(
             news=news,
             author=author,
-            text=f'Текст {index}',
+            text='Текст комментария',
             created=now + timedelta(days=index),
         )
         comments.created = now + timedelta(days=index)
@@ -76,6 +76,5 @@ def slug_for_args(news):
 @pytest.fixture
 def form_data():
     return {
-        'title': 'Новый заголовок',
-        'text': 'Новый текст',
+        'text': 'Текст комментария',
     }
