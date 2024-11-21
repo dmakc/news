@@ -1,0 +1,2 @@
+MAX_SLICE: int = 20
+MAX_FIELD_LENGTH: int = 50

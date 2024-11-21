@@ -1,5 +1,5 @@
 """
-WSGI config for yanews project.
+WSGI config for news project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

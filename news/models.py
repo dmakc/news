@@ -3,11 +3,21 @@ from datetime import datetime
 from django.conf import settings
 from django.db import models
 
+from core.constants import MAX_SLICE, MAX_FIELD_LENGTH
+
 
 class News(models.Model):
-    title = models.CharField(max_length=50)
-    text = models.TextField()
-    date = models.DateField(default=datetime.today)
+    title = models.CharField(
+        max_length=MAX_FIELD_LENGTH,
+        verbose_name='Название',
+    )
+    text = models.TextField(
+        verbose_name='Текст',
+    )
+    date = models.DateField(
+        default=datetime.today,
+        verbose_name='Дата',
+    )
 
     class Meta:
         ordering = ('-date',)
@@ -15,7 +25,7 @@ class News(models.Model):
         verbose_name = 'Новость'
 
     def __str__(self):
-        return self.title
+        return self.text[:MAX_SLICE]
 
 
 class Comment(models.Model):
@@ -34,4 +44,4 @@ class Comment(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return self.text[:50]
+        return self.text[:MAX_SLICE]

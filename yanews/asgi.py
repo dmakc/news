@@ -1,5 +1,5 @@
 """
-ASGI config for yanews project.
+ASGI config for news project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

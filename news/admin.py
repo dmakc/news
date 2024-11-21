@@ -13,3 +13,10 @@ class NewsAdmin(admin.ModelAdmin):
     inlines = [
         CommentInline,
     ]
+    list_display = (
+        'title',
+        'text',
+        'date',
+    )
+    list_filter = ('title', 'date',)
+    list_display_links = ('title',)
